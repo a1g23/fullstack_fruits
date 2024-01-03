@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("../partials/head.ejs") %>
+<body>
+    
+    <%- include("../partials/header.ejs") %>
+
+    <main>
+        <div>
+            
+            <h2><%=indyFruit.name%> - <%=indyFruit.readyToEat ? "Ripe" : "Not Ripe" %></h2>
+            <h3><%= indyFruit.color %></h3>
+            <a href="/fruits/<%= indyFruit._id %>/edit"><button>Edit</button></a>
+            <form action="/fruits/<%= indyFruit._id %>?_method=DELETE" method="POST">
+                <button>Delete</button>
+            </form>
+            <a href="/fruits"><button>Back to Main</button></a>
+        </div>
+    </main>
+
+</body>
+</html>

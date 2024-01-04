@@ -6,7 +6,7 @@ const express = require("express") // import express
 const morgan = require("morgan") //import morgan
 const methodOverride = require("method-override") // override for forms
 const fruitController = require("./controllers/fruit.js")
-
+const userController = require("./controllers/user.js")
 
 
 
@@ -23,7 +23,7 @@ app.use(express.static("public")) // basically adding a folder of public to serv
 
 // add the router to be specific to the fruit controller if it starts with /fruits in URL
 app.use("/fruits", fruitController)
-
+app.use("/user", userController)
 // ROUTES
 
 

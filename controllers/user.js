@@ -1,7 +1,7 @@
 // Import Dependencies
 
 const express = require("express")
-const User = require("../models/User.js")
+const User = require("../models/user")
 const bcrypt = require("bcryptjs")
 
 // Create Router
@@ -52,15 +52,47 @@ router.get("/login", (req, res) => {
 
 // Login Submit Route (post -> /user/login -> login the user)
 router.post("/login", async (req, res) => {
-    res.send("login")
+    
+    try {
+    //get the username and password from the req.body
+    const {username, password} = req.body
+
+    //search the db for the user
+    const user = await User.findOne({username})
+
+    //check if the user exists
+    if (!user){
+        throw new Error("User Error: User Does Not Exist")
+    } 
+    // create variable that will be true or false for if password matches
+    const result = await bcrypt.compare(password, user.password)
+
+    // check result of the password match
+    if (!result){
+        throw new Error("Password Incorrect")
+    }
+
+    // save that the user is logged in in req.session
+    req.session.username = username
+    req.session.loggedIn = true
+
+    res.redirect("/fruits")
+
+
+} catch (error) {
+    console.log("-----", error.message, "------");
+    res.status(400).send("error, read logs for details");
+}
 })
 
 
 
 // Logout Router (??? -> destroy the session)
 router.get("/logout", async (req, res) => {
-    res.send("logout")
-})
+    req.session.destroy((err) => {
+      res.redirect("/user/login")
+    })
+  })
 // Export the Router
 
 module.exports = router

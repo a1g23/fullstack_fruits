@@ -7,7 +7,8 @@ const morgan = require("morgan") //import morgan
 const methodOverride = require("method-override") // override for forms
 const fruitController = require("./controllers/fruit.js")
 const userController = require("./controllers/user.js")
-
+const session = require("express-session")
+const MongoStore = require("connect-mongo")
 
 
 // run the app
@@ -20,11 +21,19 @@ app.use(morgan("dev")) // the string dev is the type of logs that morgan will se
 app.use(methodOverride("_method")) // allow for put and delete requests
 app.use(express.urlencoded({extended: true})) // parse url encoded bodys (forms that we can look reqs)
 app.use(express.static("public")) // basically adding a folder of public to serve files
+app.use(session({
+    secret: process.env.SECRET,
+    store: MongoStore.create({mongoUrl: process.env.DATABASE_URL}),
+    saveUninitialized: true,
+    resave: false
+}))
 
+
+// Router Middleware
 // add the router to be specific to the fruit controller if it starts with /fruits in URL
 app.use("/fruits", fruitController)
 app.use("/user", userController)
-// ROUTES
+
 
 
 

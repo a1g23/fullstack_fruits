@@ -7,6 +7,20 @@ const Fruit = require("../models/Fruit.js")
 
 const router = express.Router()
 
+// Middleware (we only want users who have an active session to be able to access)
+router.use((req, res, next) => {
+
+    console.table(req.session)
+
+    if(req.session.loggedIn){
+        next()
+    } else {
+        res.redirect("/user/login")
+    }
+
+    
+})
+
 
 // Routes
 
